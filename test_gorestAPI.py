@@ -6,16 +6,6 @@ import json
 ####GET#####################################################################################################################################################
 @pytest.mark.gethappy
 class TestGetHappy:
-    @pytest.fixture(scope="module")
-    def get_request_returns_response(self):    
-        response = requests.get("https://gorest.co.in/public-api/users", headers={'Authorization': 'Bearer VqRUbB84gJ6bMP97UeRK3MYpC608ZRcsVVYd'})
-        return response
-
-    @pytest.fixture(scope="module")
-    def get_convert_response_to_json(self, get_request_returns_response):    
-        response_body = get_request_returns_response.json()
-        return response_body
-
     def test_get_check_status_code_equals_200(self, get_request_returns_response):
         assert get_request_returns_response.status_code == 200
 

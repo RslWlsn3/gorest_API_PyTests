@@ -3,6 +3,16 @@ import pytest
 import json
 from random import randrange
 
+@pytest.fixture(scope="module")
+def get_request_returns_response():    
+    response = requests.get("https://gorest.co.in/public-api/users", headers={'Authorization': 'Bearer VqRUbB84gJ6bMP97UeRK3MYpC608ZRcsVVYd'})
+    return response
+
+@pytest.fixture(scope="module")
+def get_convert_response_to_json(get_request_returns_response):    
+    response_body = get_request_returns_response.json()
+    return response_body
+
 POST_FIRST_NAME = "Connor"
 POST_LAST_NAME = "Mote"
 POST_GENDER = "male"
