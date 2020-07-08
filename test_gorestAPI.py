@@ -4,46 +4,46 @@ import json
 
 #happy paths
 ####GET#####################################################################################################################################################
-@pytest.fixture(scope="module")
-def get_request_returns_response():    
-    response = requests.get("https://gorest.co.in/public-api/users", headers={'Authorization': 'Bearer VqRUbB84gJ6bMP97UeRK3MYpC608ZRcsVVYd'})
-    return response
+@pytest.mark.gethappy
+class TestGetHappy:
+    @pytest.fixture(scope="module")
+    def get_request_returns_response(self):    
+        response = requests.get("https://gorest.co.in/public-api/users", headers={'Authorization': 'Bearer VqRUbB84gJ6bMP97UeRK3MYpC608ZRcsVVYd'})
+        return response
 
-@pytest.fixture(scope="module")
-def get_convert_response_to_json(get_request_returns_response):    
-    response_body = get_request_returns_response.json()
-    return response_body
+    @pytest.fixture(scope="module")
+    def get_convert_response_to_json(self, get_request_returns_response):    
+        response_body = get_request_returns_response.json()
+        return response_body
 
-def test_get_check_status_code_equals_200(get_request_returns_response):
-    assert get_request_returns_response.status_code == 200
+    def test_get_check_status_code_equals_200(self, get_request_returns_response):
+        assert get_request_returns_response.status_code == 200
 
-def test_get_check_content_type_equals_json(get_request_returns_response):
-    assert get_request_returns_response.headers['Content-Type'] == "application/json; charset=UTF-8"
+    def test_get_check_content_type_equals_json(self, get_request_returns_response):
+        assert get_request_returns_response.headers['Content-Type'] == "application/json; charset=UTF-8"
 
-# @pytest.mark.parametrize("index,id", [(0, "1859"), (1, "1863"), (2, "1864")])
-# def test_get_payload(index, id, get_convert_response_to_json):    
-#     assert get_convert_response_to_json["result"][index]["id"] == id
-
-def test_get_results_return_twenty(get_convert_response_to_json):
-     assert len(get_convert_response_to_json["result"]) == 20
+    def test_get_results_return_twenty(self, get_convert_response_to_json):
+        assert len(get_convert_response_to_json["result"]) == 20
 
 ####POST######################################################################################################################################################
 POST_FIRST_NAME = "Connor"
 POST_LAST_NAME = "Mote"
 POST_GENDER = "male"
 
-def test_get_check_status_code_equals_200(post_request_returns_response, post_get_convert_response_to_json):
-    assert post_request_returns_response.status_code == 200
-    assert post_get_convert_response_to_json["_meta"]["code"] == 200 #need to flip 
+@pytest.mark.posthappy
+class TestPostHappy:
+    def test_get_check_status_code_equals_200(self, post_request_returns_response, post_get_convert_response_to_json):
+        assert post_request_returns_response.status_code == 200
+        assert post_get_convert_response_to_json["_meta"]["code"] == 200 #need to flip 
 
-def test_post_check_content_type_equals_json(post_request_returns_response):
-    assert post_request_returns_response.headers['Content-Type'] == "application/json; charset=UTF-8"
+    def test_post_check_content_type_equals_json(self, post_request_returns_response):
+        assert post_request_returns_response.headers['Content-Type'] == "application/json; charset=UTF-8"
 
-@pytest.mark.parametrize("key,value", [ ('first_name', POST_FIRST_NAME), ('last_name', POST_LAST_NAME),
-                        ('gender', POST_GENDER)]) #put constants in sererate file
-def test_get_payload(key, value, post_get_convert_response_to_json):         
-    assert post_get_convert_response_to_json["result"]["id"] != None
-    assert post_get_convert_response_to_json["result"][key] == value
+    @pytest.mark.parametrize("key,value", [ ('first_name', POST_FIRST_NAME), ('last_name', POST_LAST_NAME),
+                            ('gender', POST_GENDER)]) #put constants in sererate file
+    def test_get_payload(self, key, value, post_get_convert_response_to_json):         
+        assert post_get_convert_response_to_json["result"]["id"] != None
+        assert post_get_convert_response_to_json["result"][key] == value
 
 ###PUT#######################################################################################################################################################
 # PUT_FIRST_NAME = "Connor"
