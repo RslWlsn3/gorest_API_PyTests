@@ -36,13 +36,15 @@ def GET_fake_id():
             'Authorization': AUTHORIZATION_CODE})
     return response
 
+
 @pytest.fixture(scope="module")
 def GET_bad_authorization_code():
     response = requests.get(
         API_URL,
         headers={
-            'Authorization': 'Bearer VqRUbBas7UeRK3MYpC608ZRcsVVYd'})    
+            'Authorization': 'Bearer VqRUbBas7UeRK3MYpC608ZRcsVVYd'})
     return response
+
 
 @pytest.fixture(scope="module")
 def GET_bad_url():

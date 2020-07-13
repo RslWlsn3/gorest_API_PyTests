@@ -27,20 +27,20 @@ class TestGet:
         response_body = GET_fake_id.json()
         assert 404 == response_body["_meta"]["code"]
         assert 404 == response_body["result"]["status"]
-    
+
     def test_GET_bad_authorization_401(self, GET_bad_authorization_code):
         assert 200 == GET_bad_authorization_code.status_code
         response_body = GET_bad_authorization_code.json()
         assert 401 == response_body["_meta"]["code"]
-    
+
     # I need to raise the exception in my own code to be able to catch it
-    # def test_GET_bad_url_404(self): 
-    #     with pytest.raises(ConnectionError):   
+    # def test_GET_bad_url_404(self):
+    #     with pytest.raises(ConnectionError):
     #         requests.get(
     #             "https://gorasdfest.co.in/public-api/users",
     #             headers={'Authorization':
     #                 'Bearer VqRUbB84gJ6bMP97UeRK3MYpC608ZRcsVVYd'})
-            
+
 
 # ####POST#################################################################
 POST_FIRST_NAME = "Connor"
