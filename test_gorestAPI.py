@@ -1,8 +1,11 @@
 import pytest
 
+EXPECTED_CONTENT_TYPE = "application/json; charset=UTF-8"
 
 # ###GET###################################################################
 # happy paths
+
+
 @pytest.mark.get
 class TestGet:
     def test_get_check_status_code_equals_200(
@@ -11,7 +14,7 @@ class TestGet:
 
     def test_get_check_content_type_equals_json(
             self, get_request_returns_response):
-        assert ("application/json; charset=UTF-8" ==
+        assert (EXPECTED_CONTENT_TYPE ==
                 get_request_returns_response.headers['Content-Type'])
 
     def test_get_results_return_twenty(self, get_convert_response_to_json):
@@ -43,7 +46,7 @@ class TestPost:
 
     def test_post_check_content_type_equals_json(
             self, post_request_returns_response):
-        assert ("application/json; charset=UTF-8" ==
+        assert (EXPECTED_CONTENT_TYPE ==
                 post_request_returns_response.headers['Content-Type'])
 
     @pytest.mark.parametrize("key,value",
@@ -79,7 +82,7 @@ class TestPut:
     def test_put_check_content_type_equals_json(
             self, put_request_returns_response):
         content_type = put_request_returns_response.headers['Content-Type']
-        assert "application/json; charset=UTF-8" == content_type
+        assert EXPECTED_CONTENT_TYPE == content_type
 
     def test_put_payload(
             self,
@@ -112,7 +115,7 @@ class TestDelete:
 
     def test_delete_check_content_type_equals_json(
             self, delete_request_returns_response):
-        assert ("application/json; charset=UTF-8" ==
+        assert (EXPECTED_CONTENT_TYPE ==
                 delete_request_returns_response.headers['Content-Type'])
 
     def test_delete_payload(self, delete_convert_response_to_json):
