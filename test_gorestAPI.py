@@ -8,26 +8,39 @@ EXPECTED_CONTENT_TYPE = "application/json; charset=UTF-8"
 
 @pytest.mark.get
 class TestGet:
-    def test_get_check_status_code_equals_200(
-            self, get_request_returns_response):
-        assert 200 == get_request_returns_response.status_code
+    def test_GET_check_status_code_equals_200(
+            self, GET_request_returns_response):
+        assert 200 == GET_request_returns_response.status_code
 
-    def test_get_check_content_type_equals_json(
-            self, get_request_returns_response):
+    def test_GET_check_content_type_equals_json(
+            self, GET_request_returns_response):
         assert (EXPECTED_CONTENT_TYPE ==
-                get_request_returns_response.headers['Content-Type'])
+                GET_request_returns_response.headers['Content-Type'])
 
-    def test_get_results_return_twenty(self, get_convert_response_to_json):
-        assert 20 == len(get_convert_response_to_json["result"])
+    def test_GET_results_return_twenty(self, GET_convert_response_to_json):
+        assert 20 == len(GET_convert_response_to_json["result"])
 
 # Negative testing
-    def test_get_check_status_code_equals_404(
-            self, get_bad_request):
-        assert 200 == get_bad_request.status_code
-        response_body = get_bad_request.json()
+    def test_GET_check_status_code_equals_404(
+            self, GET_fake_id):
+        assert 200 == GET_fake_id.status_code
+        response_body = GET_fake_id.json()
         assert 404 == response_body["_meta"]["code"]
         assert 404 == response_body["result"]["status"]
-
+    
+    def test_GET_bad_authorization_401(self, GET_bad_authorization_code):
+        assert 200 == GET_bad_authorization_code.status_code
+        response_body = GET_bad_authorization_code.json()
+        assert 401 == response_body["_meta"]["code"]
+    
+    # I need to raise the exception in my own code to be able to catch it
+    # def test_GET_bad_url_404(self): 
+    #     with pytest.raises(ConnectionError):   
+    #         requests.get(
+    #             "https://gorasdfest.co.in/public-api/users",
+    #             headers={'Authorization':
+    #                 'Bearer VqRUbB84gJ6bMP97UeRK3MYpC608ZRcsVVYd'})
+            
 
 # ####POST#################################################################
 POST_FIRST_NAME = "Connor"
@@ -37,17 +50,17 @@ POST_GENDER = "male"
 
 @pytest.mark.post
 class TestPost:
-    def test_check_status_code_equals_200(
+    def test_POST_check_status_code_equals_200(
             self,
-            post_request_returns_response,
-            post_convert_response_to_json):
-        assert 200 == post_request_returns_response.status_code
-        assert 200 == post_convert_response_to_json["_meta"]["code"]
+            POST_request_returns_response,
+            POST_convert_response_to_json):
+        assert 200 == POST_request_returns_response.status_code
+        assert 200 == POST_convert_response_to_json["_meta"]["code"]
 
-    def test_post_check_content_type_equals_json(
-            self, post_request_returns_response):
+    def test_POST_check_content_type_equals_json(
+            self, POST_request_returns_response):
         assert (EXPECTED_CONTENT_TYPE ==
-                post_request_returns_response.headers['Content-Type'])
+                POST_request_returns_response.headers['Content-Type'])
 
     @pytest.mark.parametrize("key,value",
                              [('first_name',
@@ -56,75 +69,75 @@ class TestPost:
                                POST_LAST_NAME),
                                  ('gender',
                                   POST_GENDER)])  # consts in separate file
-    def test_post_payload(self, key, value, post_convert_response_to_json):
-        assert None is not post_convert_response_to_json["result"]["id"]
-        assert value == post_convert_response_to_json["result"][key]
+    def test_POST_payload(self, key, value, POST_convert_response_to_json):
+        assert None is not POST_convert_response_to_json["result"]["id"]
+        assert value == POST_convert_response_to_json["result"][key]
 
 # Negative testing
     def test_check_status_code_equals_422(
             self,
-            negative_post_request_returns_response,
-            negative_post_request_returns_json):
-        assert 200 == negative_post_request_returns_response.status_code
-        assert 422 == negative_post_request_returns_json["_meta"]["code"]
+            negative_POST_request_returns_response,
+            negative_POST_request_returns_json):
+        assert 200 == negative_POST_request_returns_response.status_code
+        assert 422 == negative_POST_request_returns_json["_meta"]["code"]
 # ##PUT####################################################################
 
 
 @pytest.mark.put
 class TestPut:
-    def test_check_status_code_equals_200(
+    def test_PUT_check_status_code_equals_200(
             self,
-            put_request_returns_response,
-            put_convert_response_to_json):
-        assert 200 == put_request_returns_response.status_code
-        assert 200 == put_convert_response_to_json["_meta"]["code"]
+            PUT_request_returns_response,
+            PUT_convert_response_to_json):
+        assert 200 == PUT_request_returns_response.status_code
+        assert 200 == PUT_convert_response_to_json["_meta"]["code"]
 
-    def test_put_check_content_type_equals_json(
-            self, put_request_returns_response):
-        content_type = put_request_returns_response.headers['Content-Type']
+    def test_PUT_check_content_type_equals_json(
+            self, PUT_request_returns_response):
+        content_type = PUT_request_returns_response.headers['Content-Type']
         assert EXPECTED_CONTENT_TYPE == content_type
 
-    def test_put_payload(
+    def test_PUT_payload(
             self,
-            put_convert_response_to_json,
-            return_PutData_obj):
-        assert (return_PutData_obj.ID ==
-                put_convert_response_to_json["result"]['id'])
-        assert (return_PutData_obj.PUT_FIRST_NAME ==
-                put_convert_response_to_json["result"]['first_name'])
+            PUT_convert_response_to_json,
+            return_PUTData_obj):
+        assert (return_PUTData_obj.ID ==
+                PUT_convert_response_to_json["result"]['id'])
+        assert (return_PUTData_obj.PUT_FIRST_NAME ==
+                PUT_convert_response_to_json["result"]['first_name'])
 
 # Negative testing
     def test_check_status_code_equals_404(
             self,
-            negative_put_request_returns_response,
-            negative_put_convert_response_to_json):
-        assert 200 == negative_put_request_returns_response.status_code
-        assert 404 == negative_put_convert_response_to_json["_meta"]["code"]
+            negative_PUT_request_returns_response,
+            negative_PUT_convert_response_to_json):
+        assert 200 == negative_PUT_request_returns_response.status_code
+        assert 404 == negative_PUT_convert_response_to_json["_meta"]["code"]
 
 # ##DELETE#################################################################
 
 
 @pytest.mark.delete
 class TestDelete:
-    def test_check_status_code_equals_200(
+    def test_DELETE_check_status_code_equals_200(
             self,
-            delete_request_returns_response,
-            delete_convert_response_to_json):
-        assert 200 == delete_request_returns_response.status_code
-        assert 204 == delete_convert_response_to_json["_meta"]["code"]
+            DELETE_request_returns_response,
+            DELETE_convert_response_to_json):
+        assert 200 == DELETE_request_returns_response.status_code
+        assert 204 == DELETE_convert_response_to_json["_meta"]["code"]
 
-    def test_delete_check_content_type_equals_json(
-            self, delete_request_returns_response):
+    def test_DELETE_check_content_type_equals_json(
+            self, DELETE_request_returns_response):
         assert (EXPECTED_CONTENT_TYPE ==
-                delete_request_returns_response.headers['Content-Type'])
+                DELETE_request_returns_response.headers['Content-Type'])
 
-    def test_delete_payload(self, delete_convert_response_to_json):
-        assert None is delete_convert_response_to_json["result"]
+    def test_DELETE_payload(self, DELETE_convert_response_to_json):
+        assert None is DELETE_convert_response_to_json["result"]
 
 # Negative testing
-    def test_get_check_status_code_equals_404(
+    def test_GET_check_status_code_equals_404(
             self,
-            negative_delete_request_returns_response,
-            negative_delete_convert_response_to_json):
-        assert 200 == negative_delete_request_returns_response.status_code
-        assert 404 == negative_delete_convert_response_to_json["_meta"]["code"]
+            negative_DELETE_request_returns_response,
+            negative_DELETE_convert_response_to_json):
+        assert 200 == negative_DELETE_request_returns_response.status_code
+        assert 404 == negative_DELETE_convert_response_to_json["_meta"]["code"]

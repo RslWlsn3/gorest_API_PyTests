@@ -12,7 +12,7 @@ FAKE_ID = "20974203928"
 
 
 @pytest.fixture(scope="module")
-def get_request_returns_response():
+def GET_request_returns_response():
     response = requests.get(
         API_URL,
         headers={
@@ -21,17 +21,33 @@ def get_request_returns_response():
 
 
 @pytest.fixture(scope="module")
-def get_convert_response_to_json(get_request_returns_response):
-    response_body = get_request_returns_response.json()
+def GET_convert_response_to_json(GET_request_returns_response):
+    response_body = GET_request_returns_response.json()
     return response_body
 
 # negative
 
 
 @pytest.fixture(scope="module")
-def get_bad_request():
+def GET_fake_id():
     response = requests.get(
         API_URL + "/" + FAKE_ID,
+        headers={
+            'Authorization': AUTHORIZATION_CODE})
+    return response
+
+@pytest.fixture(scope="module")
+def GET_bad_authorization_code():
+    response = requests.get(
+        API_URL,
+        headers={
+            'Authorization': 'Bearer VqRUbBas7UeRK3MYpC608ZRcsVVYd'})    
+    return response
+
+@pytest.fixture(scope="module")
+def GET_bad_url():
+    response = requests.get(
+        "https://gorasdfest.co.in/public-api/users",
         headers={
             'Authorization': AUTHORIZATION_CODE})
     return response
@@ -51,7 +67,7 @@ payload = {
 
 
 @pytest.fixture(scope="module")
-def post_request_returns_response():
+def POST_request_returns_response():
     response = requests.post(
         API_URL,
         headers={
@@ -61,16 +77,16 @@ def post_request_returns_response():
 
 
 @pytest.fixture(scope="module")
-def post_convert_response_to_json(post_request_returns_response):
-    response_body = post_request_returns_response.json()
+def POST_convert_response_to_json(POST_request_returns_response):
+    response_body = POST_request_returns_response.json()
     return response_body
 
 # negative
 
 
 @pytest.fixture(scope="module")
-def negative_post_request_returns_response(get_convert_response_to_json):
-    already_used_email = get_convert_response_to_json["result"][0]["email"]
+def negative_POST_request_returns_response(GET_convert_response_to_json):
+    already_used_email = GET_convert_response_to_json["result"][0]["email"]
     payload = {
         "first_name": POST_FIRST_NAME,
         "last_name": POST_LAST_NAME,
@@ -86,8 +102,8 @@ def negative_post_request_returns_response(get_convert_response_to_json):
 
 
 @pytest.fixture(scope="module")
-def negative_post_request_returns_json(negative_post_request_returns_response):
-    response_body = negative_post_request_returns_response.json()
+def negative_POST_request_returns_json(negative_POST_request_returns_response):
+    response_body = negative_POST_request_returns_response.json()
     return response_body
 
 # ##PUT###################################################################
@@ -95,8 +111,8 @@ def negative_post_request_returns_json(negative_post_request_returns_response):
 
 
 @pytest.fixture(scope="module")
-def return_PutData_obj():
-    class PutData:
+def return_PUTData_obj():
+    class PUTData:
         PUT_FIRST_NAME = "Connor Mote"
         payload = {
             "first_name": PUT_FIRST_NAME
@@ -111,43 +127,43 @@ def return_PutData_obj():
             response_body = response.json()
             self.ID = response_body["result"][0]['id']
 
-    pd = PutData()
+    pd = PUTData()
     return pd
 
 
 @pytest.fixture(scope="module")
-def put_request_returns_response(return_PutData_obj):
+def PUT_request_returns_response(return_PUTData_obj):
     response = requests.put(
         API_URL + "/" + str(
-            return_PutData_obj.ID),
+            return_PUTData_obj.ID),
         headers={
             'Authorization': AUTHORIZATION_CODE},
-        data=return_PutData_obj.payload)
+        data=return_PUTData_obj.payload)
     return response
 
 
 @pytest.fixture(scope="module")
-def put_convert_response_to_json(put_request_returns_response):
-    response_body = put_request_returns_response.json()
+def PUT_convert_response_to_json(PUT_request_returns_response):
+    response_body = PUT_request_returns_response.json()
     return response_body
 
 # negative
 
 
 @pytest.fixture(scope="module")
-def negative_put_request_returns_response(return_PutData_obj):
+def negative_PUT_request_returns_response(return_PUTData_obj):
     response = requests.put(
         API_URL + "/" + FAKE_ID,
         headers={
             'Authorization': AUTHORIZATION_CODE},
-        data=return_PutData_obj.payload)
+        data=return_PUTData_obj.payload)
     return response
 
 
 @pytest.fixture(scope="module")
-def negative_put_convert_response_to_json(
-        negative_put_request_returns_response):
-    response_body = negative_put_request_returns_response.json()
+def negative_PUT_convert_response_to_json(
+        negative_PUT_request_returns_response):
+    response_body = negative_PUT_request_returns_response.json()
     return response_body
 
 
@@ -170,7 +186,7 @@ def return_DELETEData_obj():
 
 
 @pytest.fixture(scope="module")
-def delete_request_returns_response(return_DELETEData_obj):
+def DELETE_request_returns_response(return_DELETEData_obj):
     response = requests.delete(
         API_URL + "/" +
         return_DELETEData_obj.ID,
@@ -180,15 +196,15 @@ def delete_request_returns_response(return_DELETEData_obj):
 
 
 @pytest.fixture(scope="module")
-def delete_convert_response_to_json(delete_request_returns_response):
-    response_body = delete_request_returns_response.json()
+def DELETE_convert_response_to_json(DELETE_request_returns_response):
+    response_body = DELETE_request_returns_response.json()
     return response_body
 
 # negative
 
 
 @pytest.fixture(scope="module")
-def negative_delete_request_returns_response():
+def negative_DELETE_request_returns_response():
     response = requests.delete(
         API_URL + "/" + FAKE_ID,
         headers={
@@ -197,7 +213,7 @@ def negative_delete_request_returns_response():
 
 
 @pytest.fixture(scope="module")
-def negative_delete_convert_response_to_json(
-        negative_delete_request_returns_response):
-    response_body = negative_delete_request_returns_response.json()
+def negative_DELETE_convert_response_to_json(
+        negative_DELETE_request_returns_response):
+    response_body = negative_DELETE_request_returns_response.json()
     return response_body
