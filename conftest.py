@@ -46,13 +46,14 @@ def GET_bad_authorization_code():
     return response
 
 
-@pytest.fixture(scope="module")
-def GET_bad_url():
-    response = requests.get(
-        "https://gorasdfest.co.in/public-api/users",
-        headers={
-            'Authorization': AUTHORIZATION_CODE})
-    return response
+# raise exception in this fixture?
+# @pytest.fixture(scope="module")
+# def GET_bad_url():
+#     response = requests.get(
+#         "https://gorasdfest.co.in/public-api/users",
+#         headers={
+#             'Authorization': AUTHORIZATION_CODE})
+#     return response
 
 
 # ###POST#################################################################
